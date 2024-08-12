@@ -1,0 +1,30 @@
+apiVersion: app/v1
+kind: Deployment
+metadata:
+  name: vproapp
+  lables:
+    app: vproapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vproapp
+  template:
+    metadata:
+      lables:
+        app: vproapp
+    spec:
+      containers:
+        - name: vproapp
+          image: scrappyc0co/vprofileweb: V1
+          ports:
+             - name: vproapp-port
+               containerPort: 8080
+      initContainers:
+        - name: init-mydb
+          image: busybox
+          command ['sh', '-c', 'until nslookup vprodb; do echo waiting for mydb; sleep 2; done;']
+        - name: init-mydb
+          image: busybox
+          command ['sh', '-c', 'until nslookup vprcache01; do echo waiting for mydb; sleep 2; done;']
+
